@@ -4,7 +4,9 @@
   "description": "A CLI for generating FHIR Questionnaires for an IG",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "lint": "eslint \"**/*.js\"",
+    "lint:fix": "eslint \"**/*.js\" --quiet --fix"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/mcode/ig-to-questionnaire/issues"
   },
-  "homepage": "https://github.com/mcode/ig-to-questionnaire#readme"
+  "homepage": "https://github.com/mcode/ig-to-questionnaire#readme",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2"
+  }
 }
