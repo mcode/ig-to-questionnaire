@@ -4,7 +4,8 @@
   "description": "A CLI for generating FHIR Questionnaires for an IG",
   "main": "index.js",
   "scripts": {
-    "test": "test",
+    "test": "jest --maxWorkers=4 --coverage",
+    "test:watch": "npm test -- --watchAll",
     "lint": "eslint \"**/*.js\"",
     "lint:fix": "eslint \"**/*.js\" --quiet --fix"
   },
@@ -21,6 +22,11 @@
   "devDependencies": {
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-plugin-import": "^2.20.2"
+    "eslint-plugin-import": "^2.20.2",
+    "jest": "^26.0.1"
+  },
+  "dependencies": {
+    "fhir": "^4.7.8",
+    "uuid": "^8.0.0"
   }
 }
