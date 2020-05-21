@@ -5,7 +5,6 @@ const handlers = require('./handlers');
 
 const RESOURCE_URL = 'http://hl7.org/fhir/tools/StructureDefinition/resource-information';
 
-// const generateValueSetStatement = (name, id) => `valueset "${name}": '${id}'`;
 const getIdFromReference = (r) => r.reference.reference.split('/')[1];
 
 function collectValueSets(ig) {
@@ -58,7 +57,7 @@ function collectResources(igDir, igJson, valueSetMap) {
 
 function generateCQL(library) {
   const {
-    name, version, fhirVersion, valueSetMap,
+    name, version, fhirVersion, valueSetMap, resources,
   } = library;
 
   // Initialize cql with name and version of IG for the library
@@ -67,6 +66,13 @@ function generateCQL(library) {
   // Add valuesets based on map
   Object.entries(valueSetMap).forEach(([vsId, vsName]) => {
     cql += `valueset "${vsName}": '${vsId}'\n`;
+  });
+
+  // Process defintions for all resources
+  resources.forEach((r) => {
+    r.definitions.forEach((d) => {
+      cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
+    });
   });
 
   return cql;
