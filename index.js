@@ -22,4 +22,7 @@ const igJson = JSON.parse(fs.readFileSync(path.join(igDir, igFile), 'utf8'));
 
 logger.info('building CQL');
 const library = buildLibrary(igDir, igJson);
-console.log(`\nResulting CQL:\n\n${library}`);
+
+const outputFile = `${igJson.name}.cql`;
+fs.writeFileSync(outputFile, library, 'utf8');
+logger.info(`wrote output to ${outputFile}`);

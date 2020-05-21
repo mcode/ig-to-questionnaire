@@ -1,14 +1,67 @@
 const fhirpath = require('fhirpath');
+const { CODE_SYSTEMS } = require('./constants');
+
+function getCodeOrValueSet(resourceType, structureDef, valueSetMap) {
+  const codeQuery = `snapshot.element.where(id = '${resourceType}.code').patternCodeableConcept.coding`;
+  const vsQuery = `snapshot.element.where(id = '${resourceType}.code').binding.valueSet`;
+
+  const code = fhirpath.evaluate(structureDef, codeQuery)[0];
+  const vs = fhirpath.evaluate(structureDef, vsQuery)[0];
+
+  if (code) {
+    return {
+      type: 'code',
+      name: `${structureDef.name} Code`,
+      code: code.code,
+      system: CODE_SYSTEMS[code.system],
+    };
+  }
+
+  if (vs) {
+    const vsId = vs.substring(vs.lastIndexOf('/') + 1);
+    return {
+      type: 'valueset',
+      name: structureDef.name,
+      resourceType,
+      lookupName: valueSetMap[vsId],
+    };
+  }
+
+  return null;
+}
 
 exports.handleCondition = (structureDef, valueSetMap) => {
-  const retVal = { definitions: [] };
-  const conditionCodeVS = fhirpath.evaluate(structureDef, "snapshot.element.where(id = 'Condition.code').binding.valueSet")[0];
-  const vsId = conditionCodeVS.substring(conditionCodeVS.lastIndexOf('/') + 1);
-  retVal.definitions.push({
-    name: structureDef.name,
-    resourceType: 'Condition',
-    lookupName: valueSetMap[vsId],
-  });
+  const retVal = { definitions: [], codes: [] };
+  const codeOrVs = getCodeOrValueSet('Condition', structureDef, valueSetMap);
+
+  if (codeOrVs.type === 'code') {
+    retVal.codes.push(codeOrVs);
+    retVal.definitions.push({
+      name: structureDef.name,
+      resourceType: 'Condition',
+      lookupName: codeOrVs.name,
+    });
+  } else if (codeOrVs.type === 'valueset') {
+    retVal.definitions.push(codeOrVs);
+  }
+
+  return retVal;
+};
+
+exports.handleObservation = (structureDef, valueSetMap) => {
+  const retVal = { definitions: [], codes: [] };
+  const codeOrVs = getCodeOrValueSet('Observation', structureDef, valueSetMap);
+
+  if (codeOrVs.type === 'code') {
+    retVal.codes.push(codeOrVs);
+    retVal.definitions.push({
+      name: structureDef.name,
+      resourceType: 'Observation',
+      lookupName: codeOrVs.name,
+    });
+  } else if (codeOrVs.type === 'valueset') {
+    retVal.definitions.push(codeOrVs);
+  }
 
   return retVal;
 };
@@ -16,7 +69,6 @@ exports.handleCondition = (structureDef, valueSetMap) => {
 // TODO
 // exports.handleDiagnosticReport = (structureDef, valueSetMap) => ({ definitions: [] });
 // exports.handleMedicationStatement = (structureDef, valueSetMap) => ({ definitions: [] });
-// exports.handleObservation = (structureDef, valueSetMap) => ({ definitions: [] });
 // exports.handlePatient = (structureDef, valueSetMap) => ({ definitions: [] });
 // exports.handleProcedure = (structureDef, valueSetMap) => ({ definitions: [] });
 // exports.handleSpecimen = (structureDef, valueSetMap) => ({ definitions: [] });

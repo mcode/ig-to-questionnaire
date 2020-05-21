@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const fhirpath = require('fhirpath');
+const _ = require('lodash');
 const handlers = require('../helpers/handlers');
 const logger = require('../helpers/logger');
+const { CODE_SYSTEMS } = require('../helpers/constants');
 
 const RESOURCE_URL = 'http://hl7.org/fhir/tools/StructureDefinition/resource-information';
 
@@ -35,9 +37,11 @@ function collectResources(igDir, igJson, valueSetMap) {
       case 'Condition':
         resources.push(handlers.handleCondition(structureDef, valueSetMap));
         break;
+      case 'Observation':
+        resources.push(handlers.handleObservation(structureDef, valueSetMap));
+        break;
       case 'DiagnosticReport':
       case 'MedicationStatement':
-      case 'Observation':
       case 'Patient':
       case 'Procedure':
       case 'Specimen':
@@ -61,6 +65,17 @@ function generateCQL(library) {
   Object.entries(valueSetMap).forEach(([vsId, vsName]) => {
     cql += `valueset "${vsName}": '${vsId}'\n`;
   });
+
+  Object.entries(CODE_SYSTEMS).forEach(([url, systemName]) => {
+    cql += `\ncodesystem "${systemName}": '${url}'\n`;
+  });
+
+  // Define all codes
+  _.flatten(resources.map((r) => r.codes)).forEach((c) => {
+    cql += `\ncode "${c.name}": '${c.code}' from "${c.system}"`;
+  });
+
+  cql += '\n';
 
   // Process defintions for all resources
   resources.forEach((r) => {
