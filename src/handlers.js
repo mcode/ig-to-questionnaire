@@ -1,9 +1,7 @@
-// TODO: Implement handlers and return a string of CQL statements
-
-exports.handleCondition = (structureDef) => {};
-exports.handleDiagnosticReport = (structureDef) => {};
-exports.handleMedicationStatement = (structureDef) => {};
-exports.handleObservation = (structureDef) => {};
-exports.handlePatient = (structureDef) => {};
-exports.handleProcedure = (structureDef) => {};
-exports.handleSpecimen = (structureDef) => {};
+exports.handleCondition = (structureDef, valueSetMap) => {};
+exports.handleDiagnosticReport = (structureDef, valueSetMap) => {};
+exports.handleMedicationStatement = (structureDef, valueSetMap) => {};
+exports.handleObservation = (structureDef, valueSetMap) => {};
+exports.handlePatient = (structureDef, valueSetMap) => {};
+exports.handleProcedure = (structureDef, valueSetMap) => {};
+exports.handleSpecimen = (structureDef, valueSetMap) => {};
