@@ -1,5 +1,5 @@
 const { Fhir } = require('fhir');
-const QuestionnaireBuilder = require('../src/builder');
+const QuestionnaireBuilder = require('../src/builders/questionnaireBuilder');
 
 const fhir = new Fhir();
 
