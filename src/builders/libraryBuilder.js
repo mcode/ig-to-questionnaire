@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const fhirpath = require('fhirpath');
-const handlers = require('./handlers');
-const logger = require('./logger');
+const handlers = require('../helpers/handlers');
+const logger = require('../helpers/logger');
 
 const RESOURCE_URL = 'http://hl7.org/fhir/tools/StructureDefinition/resource-information';
 
@@ -36,25 +36,13 @@ function collectResources(igDir, igJson, valueSetMap) {
         resources.push(handlers.handleCondition(structureDef, valueSetMap));
         break;
       case 'DiagnosticReport':
-        resources.push(handlers.handleDiagnosticReport(structureDef, valueSetMap));
-        break;
       case 'MedicationStatement':
-        resources.push(handlers.handleMedicationStatement(structureDef, valueSetMap));
-        break;
       case 'Observation':
-        resources.push(handlers.handleObservation(structureDef, valueSetMap));
-        break;
       case 'Patient':
-        resources.push(handlers.handlePatient(structureDef, valueSetMap));
-        break;
       case 'Procedure':
-        resources.push(handlers.handleProcedure(structureDef, valueSetMap));
-        break;
       case 'Specimen':
-        resources.push(handlers.handleSpecimen(structureDef, valueSetMap));
-        break;
       default:
-        logger.error(`No handling implemented for ${structureDef.type}`);
+        logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
     }
   });
   return resources;

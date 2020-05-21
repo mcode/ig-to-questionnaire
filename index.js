@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const { program } = require('commander');
-const { buildLibrary } = require('./src/libraryBuilder');
-const logger = require('./src/logger');
+const { buildLibrary } = require('./src/builders/libraryBuilder');
+const logger = require('./src/helpers/logger');
 
 program
   .requiredOption('-i --ig <path-to-ig>', 'Path to full IG directory')
