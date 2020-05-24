@@ -66,9 +66,43 @@ exports.handleObservation = (structureDef, valueSetMap) => {
   return retVal;
 };
 
+exports.handleProcedure = (structureDef, valueSetMap) => {
+  const retVal = { definitions: [], codes: [] };
+  const codeOrVs = getCodeOrValueSet('Procedure', structureDef, valueSetMap);
+
+  if (codeOrVs.type === 'code') {
+    retVal.codes.push(codeOrVs);
+    retVal.definitions.push({
+      name: structureDef.name,
+      resourceType: 'Procedure',
+      lookupName: codeOrVs.name,
+    });
+  } else if (codeOrVs.type === 'valueset') {
+    retVal.definitions.push(codeOrVs);
+  }
+
+  return retVal;
+};
+
+exports.handleMedicationStatement = (structureDef, valueSetMap) => {
+  const retVal = { definitions: [], codes: [] };
+  const codeOrVs = getCodeOrValueSet('MedicationStatement', structureDef, valueSetMap);
+
+  if (codeOrVs.type === 'code') {
+    retVal.codes.push(codeOrVs);
+    retVal.definitions.push({
+      name: structureDef.name,
+      resourceType: 'MedicationStatement',
+      lookupName: codeOrVs.name,
+    });
+  } else if (codeOrVs.type === 'valueset') {
+    retVal.definitions.push(codeOrVs);
+  }
+
+  return retVal;
+};
+
 // TODO
 // exports.handleDiagnosticReport = (structureDef, valueSetMap) => ({ definitions: [] });
-// exports.handleMedicationStatement = (structureDef, valueSetMap) => ({ definitions: [] });
 // exports.handlePatient = (structureDef, valueSetMap) => ({ definitions: [] });
-// exports.handleProcedure = (structureDef, valueSetMap) => ({ definitions: [] });
 // exports.handleSpecimen = (structureDef, valueSetMap) => ({ definitions: [] });

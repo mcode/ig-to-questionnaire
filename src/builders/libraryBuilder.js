@@ -42,8 +42,12 @@ function collectResources(igDir, igJson, valueSetMap) {
         break;
       case 'DiagnosticReport':
       case 'MedicationStatement':
+        resources.push(handlers.handleObservation(structureDef, valueSetMap));
+        break;
       case 'Patient':
       case 'Procedure':
+        resources.push(handlers.handleObservation(structureDef, valueSetMap));
+        break;
       case 'Specimen':
       default:
         logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
