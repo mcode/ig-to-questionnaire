@@ -14,7 +14,7 @@ if (!fs.existsSync(program.ig)) {
   process.exit(1);
 }
 
-const igDir = path.join(path.resolve(path.join(__dirname, program.ig)), '/site');
+const igDir = path.join(path.resolve(path.relative(__dirname, program.ig)), '/site');
 const igFile = fs.readdirSync(igDir).find((f) => path.extname(f) === '.json' && f.startsWith('ImplementationGuide'));
 
 logger.info(`parsing ${igFile}`);
