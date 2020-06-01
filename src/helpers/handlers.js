@@ -26,8 +26,9 @@ function getCodeOrValueSet(resourceType, structureDef, valueSetMap) {
       lookupName: valueSetMap[vsId],
     };
   }
-
-  return null;
+//return null;
+// this is a test, might fix the error
+  //return { type: null};
 }
 
 exports.handleCondition = (structureDef, valueSetMap) => {
@@ -53,6 +54,7 @@ exports.handleObservation = (structureDef, valueSetMap) => {
   const codeOrVs = getCodeOrValueSet('Observation', structureDef, valueSetMap);
 
   if (codeOrVs.type === 'code') {
+    //console.log(codeOrVs);
     retVal.codes.push(codeOrVs);
     retVal.definitions.push({
       name: structureDef.name,
@@ -84,23 +86,26 @@ exports.handleProcedure = (structureDef, valueSetMap) => {
   return retVal;
 };
 
-exports.handleMedicationStatement = (structureDef, valueSetMap) => {
-  const retVal = { definitions: [], codes: [] };
-  const codeOrVs = getCodeOrValueSet('MedicationStatement', structureDef, valueSetMap);
+// exports.handleMedicationStatement = (structureDef, valueSetMap) => {
+//   const retVal = { definitions: [], codes: [] };
+//   const codeOrVs = getCodeOrValueSet('CancerRelatedMedicationStatement', structureDef, valueSetMap);
+//   //console.log(codeOrVs);
 
-  if (codeOrVs.type === 'code') {
-    retVal.codes.push(codeOrVs);
-    retVal.definitions.push({
-      name: structureDef.name,
-      resourceType: 'MedicationStatement',
-      lookupName: codeOrVs.name,
-    });
-  } else if (codeOrVs.type === 'valueset') {
-    retVal.definitions.push(codeOrVs);
-  }
+//   if 
+//   if (codeOrVs.type === 'code') {
+//     //console.log(codeOrVs);
+//     retVal.codes.push(codeOrVs);
+//     retVal.definitions.push({
+//       name: structureDef.name,
+//       resourceType: 'CancerRelatedMedicationStatement',
+//       lookupName: codeOrVs.name,
+//     });
+//   } else if (codeOrVs.type === 'valueset') {
+//     retVal.definitions.push(codeOrVs);
+//   }
 
-  return retVal;
-};
+//   return retVal;
+// };
 
 // TODO
 // exports.handleDiagnosticReport = (structureDef, valueSetMap) => ({ definitions: [] });
