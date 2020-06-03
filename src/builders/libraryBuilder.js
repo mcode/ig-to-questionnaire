@@ -41,10 +41,19 @@ function collectResources(igDir, igJson, valueSetMap) {
         resources.push(handlers.handleObservation(structureDef, valueSetMap));
         break;
       case 'DiagnosticReport':
+        resources.push(handlers.handleDiagnosticReport(structureDef, valueSetMap));
+        break;
       case 'MedicationStatement':
+        resources.push(handlers.handleMedicationStatement(structureDef, valueSetMap));
+        break;
       case 'Patient':
+        break;
       case 'Procedure':
+        resources.push(handlers.handleProcedure(structureDef, valueSetMap));
+        break;
       case 'Specimen':
+        resources.push(handlers.handleSpecimen(structureDef, valueSetMap));
+        break;
       default:
         logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
     }
@@ -72,7 +81,9 @@ function generateCQL(library) {
 
   // Define all codes
   _.flatten(resources.map((r) => r.codes)).forEach((c) => {
-    cql += `\ncode "${c.name}": '${c.code}' from "${c.system}"`;
+    if(c){
+     cql += `\ncode "${c.name}": '${c.code}' from "${c.system}"`;
+    }
   });
 
   cql += '\n';
@@ -80,7 +91,12 @@ function generateCQL(library) {
   // Process defintions for all resources
   resources.forEach((r) => {
     r.definitions.forEach((d) => {
-      cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
+      if(!d) return;
+      if (d.matchAttribute != null && d.matchAttribute !== 'code') {
+        cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: ${d.matchAttribute} in "${d.lookupName}"]\n`;
+      } else {
+        cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
+      }
     });
   });
 
@@ -95,6 +111,6 @@ exports.buildLibrary = (igDir, igJson) => {
     valueSetMap: collectValueSets(igJson),
   };
 
-  library.resources = collectResources(igDir, igJson, library.valueSetMap);
+  library.resources = collectResources(igDir, igJson, library.valueSetMap).filter((i) => {return i});
   return generateCQL(library);
 };
