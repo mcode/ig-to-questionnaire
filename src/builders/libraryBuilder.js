@@ -61,13 +61,16 @@ function generateCQL(library) {
   // Initialize cql with name and version of IG for the library
   let cql = `library ${name} version '${version}'\n\nusing FHIR version '${fhirVersion}'\n\n`;
 
+  // Add any codesystems used in the IG before anything else
+  Object.entries(CODE_SYSTEMS).forEach(([url, systemName]) => {
+    cql += `codesystem "${systemName}": '${url}'\n`;
+  });
+
+  cql += '\n';
+
   // Add valuesets based on map
   Object.entries(valueSetMap).forEach(([vsId, vsName]) => {
     cql += `valueset "${vsName}": '${vsId}'\n`;
-  });
-
-  Object.entries(CODE_SYSTEMS).forEach(([url, systemName]) => {
-    cql += `\ncodesystem "${systemName}": '${url}'\n`;
   });
 
   // Define all codes
@@ -91,7 +94,8 @@ exports.buildLibrary = (igDir, igJson) => {
   const library = {
     name: igJson.name,
     version: igJson.version,
-    fhirVersion: igJson.fhirVersion[0],
+    // fhirVersion: igJson.fhirVersion[0],
+    fhirVersion: '4.0.0', // FIXME: Hardcoding FHIR version to pass CQL-to-ELM. Replace when new image of the service supports FHIR 4.0.1
     valueSetMap: collectValueSets(igJson),
   };
 
