@@ -28,3 +28,8 @@ export interface CQLResource {
   definitions: CQLDefinition[];
   codes: CQLCodeDefinition[];
 }
+
+export interface Library {
+  cql: string;
+  resource: R4.ILibrary;
+}
