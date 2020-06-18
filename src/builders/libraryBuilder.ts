@@ -16,6 +16,7 @@ export class LibraryBuilder {
   ig: ImplementationGuide;
   valueSets: ValueSetObject[];
   resources: CQLResource[];
+  fhirLibrary: R4.ILibrary;
 
   constructor(igDir: string, igJson: R4.IImplementationGuide) {
     this.igDir = igDir;
@@ -28,6 +29,23 @@ export class LibraryBuilder {
     };
     this.valueSets = this.getValueSets();
     this.resources = this.getResources();
+    this.fhirLibrary = {
+      resourceType: 'Library',
+      id: this.ig.name,
+      name: this.ig.name,
+      version: this.ig.version,
+      type: {
+        coding: [
+          {
+            system: 'http://terminology.hl7.org/CodeSystem/library-type',
+            code: 'logic-library'
+          }
+        ]
+      },
+      status: R4.LibraryStatusKind._draft,
+      dataRequirement: [],
+      content: []
+    };
   }
 
   getIdFromReference(r: R4.IReference): string {
@@ -76,32 +94,6 @@ export class LibraryBuilder {
     return resources;
   }
 
-  createLibraryResource(cql: string): R4.ILibrary {
-    const { name, version } = this.ig;
-    logger.info('generating FHIR Library');
-    return {
-      resourceType: 'Library',
-      id: name,
-      name,
-      version,
-      type: {
-        coding: [
-          {
-            system: 'http://terminology.hl7.org/CodeSystem/library-type',
-            code: 'logic-library'
-          }
-        ]
-      },
-      status: R4.LibraryStatusKind._draft,
-      content: [
-        {
-          contentType: 'text/cql',
-          data: Base64.encode(cql)
-        }
-      ]
-    };
-  }
-
   buildLibrary(): Library {
     logger.info('generating CQL string');
     const { name, version, fhirVersion } = this.ig;
@@ -132,12 +124,18 @@ export class LibraryBuilder {
     this.resources.forEach(r => {
       r.definitions.forEach(d => {
         cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
+        this.fhirLibrary.dataRequirement!.push(d.dataRequirement);
       });
+    });
+
+    this.fhirLibrary.content!.push({
+      contentType: 'text/cql',
+      data: Base64.encode(cql)
     });
 
     return {
       cql,
-      resource: this.createLibraryResource(cql)
+      resource: this.fhirLibrary
     };
   }
 }

@@ -4,6 +4,35 @@ import { ValueSetObject, CQLResource, CQLCodeDefinition, CQLDefinition } from '.
 import fhirpath from 'fhirpath';
 import { logger } from './logger';
 
+function getCodeDataRequirement(resourceType: string, code: R4.ICoding): R4.IDataRequirement {
+  return {
+    type: resourceType,
+    codeFilter: [
+      {
+        path: 'code',
+        code: [
+          {
+            code: code.code,
+            system: code.system
+          }
+        ]
+      }
+    ]
+  };
+}
+
+function getValueSetDataRequirement(resourceType: string, vsId: string): R4.IDataRequirement {
+  return {
+    type: resourceType,
+    codeFilter: [
+      {
+        path: 'code',
+        valueSet: vsId
+      }
+    ]
+  };
+}
+
 export abstract class Handler {
   structureDef: R4.IStructureDefinition;
   valueSets: ValueSetObject[];
@@ -23,7 +52,8 @@ export abstract class Handler {
       ? {
           name: `${this.structureDef.name} Code`,
           code: code.code,
-          system: code.system
+          system: code.system,
+          dataRequirement: getCodeDataRequirement(resourceType, code)
         }
       : null;
   }
@@ -39,7 +69,8 @@ export abstract class Handler {
         ? {
             name: this.structureDef.name ?? '',
             resourceType,
-            lookupName: vsObject.name
+            lookupName: vsObject.name,
+            dataRequirement: getValueSetDataRequirement(resourceType, vsId)
           }
         : null;
     }
@@ -59,7 +90,8 @@ class ConditionHandler extends Handler {
       retVal.definitions.push({
         name: this.structureDef.name ?? '',
         resourceType: 'Condition',
-        lookupName: codeRestriction.name
+        lookupName: codeRestriction.name,
+        dataRequirement: codeRestriction.dataRequirement
       });
     }
 
@@ -82,7 +114,8 @@ class ObservationHandler extends Handler {
       retVal.definitions.push({
         name: this.structureDef.name ?? '',
         resourceType: 'Observation',
-        lookupName: codeRestriction.name
+        lookupName: codeRestriction.name,
+        dataRequirement: codeRestriction.dataRequirement
       });
     }
 
