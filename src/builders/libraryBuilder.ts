@@ -1,3 +1,4 @@
+import { Base64 } from 'js-base64';
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
@@ -75,7 +76,7 @@ export class LibraryBuilder {
     return resources;
   }
 
-  createLibraryResource(): R4.ILibrary {
+  createLibraryResource(cql: string): R4.ILibrary {
     const { name, version } = this.ig;
     logger.info('generating FHIR Library');
     return {
@@ -95,11 +96,7 @@ export class LibraryBuilder {
       content: [
         {
           contentType: 'text/cql',
-          url: `${name}.cql`
-        },
-        {
-          contentType: 'application/elm+json',
-          url: `${name}-elm.json`
+          data: Base64.encode(cql)
         }
       ]
     };
@@ -140,7 +137,7 @@ export class LibraryBuilder {
 
     return {
       cql,
-      resource: this.createLibraryResource()
+      resource: this.createLibraryResource(cql)
     };
   }
 }

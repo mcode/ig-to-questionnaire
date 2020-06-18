@@ -1,3 +1,4 @@
+import { Base64 } from 'js-base64';
 import fs from 'fs';
 import path from 'path';
 import program from 'commander';
@@ -39,17 +40,22 @@ const outputCQLFile = path.join(program.output, `${igJson.name}.cql`);
 fs.writeFileSync(outputCQLFile, library.cql, 'utf8');
 logger.info(`wrote CQL output to ${outputCQLFile}`);
 
-const outputLibraryFile = path.join(program.output, `${igJson.name}-library.json`);
-fs.writeFileSync(outputLibraryFile, JSON.stringify(library.resource), 'utf8');
-logger.info(`wrote FHIR Library to ${outputLibraryFile}`);
-
 logger.info('running ELM translation');
 (async () => {
   try {
     const elm = await convertBasicCQL(library.cql);
+    const elmString = JSON.stringify(elm);
+    library.resource.content!.push({
+      contentType: 'application/elm+json',
+      data: Base64.encode(elmString)
+    });
     const outputELMFile = path.join(program.output, `${igJson.name}-elm.json`);
-    fs.writeFileSync(outputELMFile, JSON.stringify(elm), 'utf8');
+    fs.writeFileSync(outputELMFile, elmString, 'utf8');
     logger.info(`wrote ELM output to ${outputELMFile}`);
+
+    const outputLibraryFile = path.join(program.output, `${igJson.name}-library.json`);
+    fs.writeFileSync(outputLibraryFile, JSON.stringify(library.resource), 'utf8');
+    logger.info(`wrote FHIR Library to ${outputLibraryFile}`);
   } catch (e) {
     logger.error('error translation CQL to ELM');
     console.error(JSON.parse(e.message));
