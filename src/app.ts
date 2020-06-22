@@ -39,6 +39,7 @@ const library = builder.buildLibrary();
 
 const outputCQLFile = path.join(program.output, `${igJson.name}.cql`);
 fs.writeFileSync(outputCQLFile, library.cql, 'utf8');
+logger.info(`wrote CQL output to ${outputCQLFile}`);
 
 logger.info('bundling ValueSets');
 const valueSets = fs
@@ -47,9 +48,9 @@ const valueSets = fs
   .map((vs: string) => JSON.parse(fs.readFileSync(path.join(igDir, vs), 'utf8')));
 
 const bundle = bundlify(valueSets);
-fs.writeFileSync(path.join(program.output, `${igJson.name}-valuesets.json`), JSON.stringify(bundle), 'utf8');
-
-logger.info(`wrote CQL output to ${outputCQLFile}`);
+const valueSetBundleFile = path.join(program.output, `${igJson.name}-valuesets.json`);
+fs.writeFileSync(valueSetBundleFile, JSON.stringify(bundle), 'utf8');
+logger.info(`wrote ValueSet bundle to ${valueSetBundleFile}`);
 
 logger.info('running ELM translation');
 (async () => {
