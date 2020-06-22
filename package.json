@@ -32,6 +32,7 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@ahryman40k/ts-fhir-types": "^4.0.25",
+    "@types/js-base64": "^2.3.1",
     "@types/lodash": "^4.14.155",
     "@types/node": "^14.0.11",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
@@ -46,6 +47,7 @@
     "commander": "^5.1.0",
     "cql-translation-service-client": "^0.5.0",
     "fhirpath": "^2.2.1",
+    "js-base64": "^2.5.2",
     "lodash": "^4.17.15",
     "winston": "^3.2.1"
   }

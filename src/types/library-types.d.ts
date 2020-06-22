@@ -16,15 +16,22 @@ export interface CQLDefinition {
   name: string;
   resourceType: string;
   lookupName: string;
+  dataRequirement: R4.IDataRequirement;
 }
 
 export interface CQLCodeDefinition {
   name: string;
   code: string;
   system: string;
+  dataRequirement: R4.IDataRequirement;
 }
 
 export interface CQLResource {
   definitions: CQLDefinition[];
   codes: CQLCodeDefinition[];
+}
+
+export interface Library {
+  cql: string;
+  resource: R4.ILibrary;
 }

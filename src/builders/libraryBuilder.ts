@@ -1,8 +1,9 @@
+import { Base64 } from 'js-base64';
 import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import { R4 } from '@ahryman40k/ts-fhir-types';
-import { ValueSetObject, ImplementationGuide, CQLResource } from '../types/library-types';
+import { ValueSetObject, ImplementationGuide, CQLResource, Library } from '../types/library-types';
 import { Handler, createHandler } from '../helpers/resourceHandlers';
 import { logger } from '../helpers/logger';
 
@@ -15,6 +16,7 @@ export class LibraryBuilder {
   ig: ImplementationGuide;
   valueSets: ValueSetObject[];
   resources: CQLResource[];
+  fhirLibrary: R4.ILibrary;
 
   constructor(igDir: string, igJson: R4.IImplementationGuide) {
     this.igDir = igDir;
@@ -27,6 +29,23 @@ export class LibraryBuilder {
     };
     this.valueSets = this.getValueSets();
     this.resources = this.getResources();
+    this.fhirLibrary = {
+      resourceType: 'Library',
+      id: this.ig.name,
+      name: this.ig.name,
+      version: this.ig.version,
+      type: {
+        coding: [
+          {
+            system: 'http://terminology.hl7.org/CodeSystem/library-type',
+            code: 'logic-library'
+          }
+        ]
+      },
+      status: R4.LibraryStatusKind._draft,
+      dataRequirement: [],
+      content: []
+    };
   }
 
   getIdFromReference(r: R4.IReference): string {
@@ -48,7 +67,7 @@ export class LibraryBuilder {
 
     valueSetDefs.forEach(vs => {
       const vsId = this.getIdFromReference(vs.reference);
-      logger.info(`found ValueSet ${vsId}`);
+      logger.debug(`found ValueSet ${vsId}`);
       valueSetMap.push({ id: vsId, name: vs.name ?? vsId });
     });
 
@@ -65,7 +84,7 @@ export class LibraryBuilder {
         fs.readFileSync(path.join(this.igDir, `/StructureDefinition-${resourceId}.json`), 'utf8')
       );
 
-      logger.info(`generating CQL definitions for profile ${structureDef.name}`);
+      logger.debug(`generating CQL definitions for profile ${structureDef.name}`);
 
       const resourceHandler: Handler | null = createHandler(structureDef, this.valueSets);
       if (resourceHandler !== null) {
@@ -75,7 +94,7 @@ export class LibraryBuilder {
     return resources;
   }
 
-  buildLibrary(): string {
+  buildLibrary(): Library {
     logger.info('generating CQL string');
     const { name, version, fhirVersion } = this.ig;
 
@@ -105,9 +124,18 @@ export class LibraryBuilder {
     this.resources.forEach(r => {
       r.definitions.forEach(d => {
         cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
+        this.fhirLibrary.dataRequirement!.push(d.dataRequirement);
       });
     });
 
-    return cql;
+    this.fhirLibrary.content!.push({
+      contentType: 'text/cql',
+      data: Base64.encode(cql)
+    });
+
+    return {
+      cql,
+      resource: this.fhirLibrary
+    };
   }
 }

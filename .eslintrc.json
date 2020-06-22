@@ -10,6 +10,7 @@
     "quotes": ["error", "single", { "avoidEscape": true }],
     "no-use-before-define": ["error", { "functions": false, "variables": false }],
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off"
   }
 }
