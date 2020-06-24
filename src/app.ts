@@ -5,6 +5,7 @@ import program from 'commander';
 import { LibraryBuilder } from './builders/libraryBuilder';
 import { logger } from './helpers/logger';
 import { convertBasicCQL } from './helpers/cql-to-elm';
+import { bundlify } from './helpers/bundler';
 
 program
   .requiredOption('-i --ig <path-to-ig>', 'Path to full IG directory')
@@ -39,6 +40,17 @@ const library = builder.buildLibrary();
 const outputCQLFile = path.join(program.output, `${igJson.name}.cql`);
 fs.writeFileSync(outputCQLFile, library.cql, 'utf8');
 logger.info(`wrote CQL output to ${outputCQLFile}`);
+
+logger.info('bundling ValueSets');
+const valueSets = fs
+  .readdirSync(igDir)
+  .filter((f: string) => path.extname(f) === '.json' && f.startsWith('ValueSet'))
+  .map((vs: string) => JSON.parse(fs.readFileSync(path.join(igDir, vs), 'utf8')));
+
+const bundle = bundlify(valueSets);
+const valueSetBundleFile = path.join(program.output, `${igJson.name}-valuesets.json`);
+fs.writeFileSync(valueSetBundleFile, JSON.stringify(bundle), 'utf8');
+logger.info(`wrote ValueSet bundle to ${valueSetBundleFile}`);
 
 logger.info('running ELM translation');
 (async () => {
