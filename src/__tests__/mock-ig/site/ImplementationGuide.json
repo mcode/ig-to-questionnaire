@@ -1,0 +1,57 @@
+{
+  "resourceType": "ImplementationGuide",
+  "id": "example",
+  "url": "http://example.com",
+  "version": "0.0.1",
+  "name": "example",
+  "title": "example",
+  "status": "draft",
+  "packageId": "example.implementation.guide",
+  "fhirVersion": ["4.0.0"],
+  "definition": {
+    "resource": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/example-observation"
+        },
+        "name": "Example Observation",
+        "description": "An Example Observation",
+        "exampleBoolean": false
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/example-condition"
+        },
+        "name": "Example Condition",
+        "description": "An Example Condition",
+        "exampleBoolean": false
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/example-valueset"
+        },
+        "name": "Example ValueSet",
+        "description": "An example ValueSet",
+        "exampleBoolean": false
+      }
+    ]
+  }
+}
