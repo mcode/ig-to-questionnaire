@@ -1,0 +1,62 @@
+{
+  "library": {
+    "annotation": [
+      { "translatorOptions": "", "type": "CqlToElmInfo" },
+      {
+        "libraryId": "example",
+        "libraryVersion": "0.0.1",
+        "startLine": 12,
+        "startChar": 2,
+        "endLine": 12,
+        "endChar": 42,
+        "message": "Could not resolve membership operator for terminology target of the retrieve.",
+        "errorType": "semantic",
+        "errorSeverity": "warning",
+        "type": "CqlToElmError"
+      }
+    ],
+    "identifier": { "id": "example", "version": "0.0.1" },
+    "schemaIdentifier": { "id": "urn:hl7-org:elm", "version": "r1" },
+    "usings": {
+      "def": [
+        { "localIdentifier": "System", "uri": "urn:hl7-org:elm-types:r1" },
+        { "localIdentifier": "FHIR", "uri": "http://hl7.org/fhir", "version": "4.0.0" }
+      ]
+    },
+    "codeSystems": { "def": [{ "name": "LOINC", "id": "http://loinc.org", "accessLevel": "Public" }] },
+    "valueSets": {
+      "def": [
+        {
+          "name": "Cancer Disease Status Evidence Type Value Set",
+          "id": "mcode-cancer-disease-status-evidence-type-vs",
+          "accessLevel": "Public"
+        }
+      ]
+    },
+    "codes": {
+      "def": [
+        {
+          "name": "CancerDiseaseStatus Code",
+          "id": "88040-1",
+          "accessLevel": "Public",
+          "codeSystem": { "name": "LOINC" }
+        }
+      ]
+    },
+    "statements": {
+      "def": [
+        {
+          "name": "CancerDiseaseStatus",
+          "context": "Patient",
+          "accessLevel": "Public",
+          "expression": {
+            "dataType": "{http://hl7.org/fhir}Observation",
+            "codeProperty": "code",
+            "type": "Retrieve",
+            "codes": { "type": "ToList", "operand": { "name": "CancerDiseaseStatus Code", "type": "CodeRef" } }
+          }
+        }
+      ]
+    }
+  }
+}
