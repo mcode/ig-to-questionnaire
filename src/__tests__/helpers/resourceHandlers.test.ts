@@ -14,9 +14,9 @@ const MOCK_VALUESET_MAP = [
 const EXPECTED_OBSERVATION_DEFINITIONS: CQLResource = {
   definitions: [
     {
-      name: 'Example Observation',
+      name: 'ExampleObservation',
       resourceType: 'Observation',
-      lookupName: 'Example Observation Code',
+      lookupName: 'ExampleObservation Code',
       dataRequirement: {
         type: 'Observation',
         codeFilter: [
@@ -35,7 +35,7 @@ const EXPECTED_OBSERVATION_DEFINITIONS: CQLResource = {
   ],
   codes: [
     {
-      name: 'Example Observation Code',
+      name: 'ExampleObservation Code',
       code: '88040-1',
       system: 'http://loinc.org',
       dataRequirement: {
@@ -59,7 +59,7 @@ const EXPECTED_OBSERVATION_DEFINITIONS: CQLResource = {
 const EXPECTED_CONDITION_DEFINITIONS: CQLResource = {
   definitions: [
     {
-      name: 'Example Condition',
+      name: 'ExampleCondition',
       resourceType: 'Condition',
       lookupName: 'Example ValueSet',
       dataRequirement: {

@@ -41,6 +41,10 @@ const outputCQLFile = path.join(program.output, `${igJson.name}.cql`);
 fs.writeFileSync(outputCQLFile, library.cql, 'utf8');
 logger.info(`wrote CQL output to ${outputCQLFile}`);
 
+const outputQuestionnaireFile = path.join(program.output, `${igJson.name}-questionnaire.json`);
+fs.writeFileSync(outputQuestionnaireFile, JSON.stringify(library.questionnaire, null, 2), 'utf8');
+logger.info(`wrote FHIR Questionnaire to ${outputQuestionnaireFile}`);
+
 logger.info('bundling ValueSets');
 const valueSets = fs
   .readdirSync(igDir)
@@ -49,14 +53,14 @@ const valueSets = fs
 
 const bundle = bundlify(valueSets);
 const valueSetBundleFile = path.join(program.output, `${igJson.name}-valuesets.json`);
-fs.writeFileSync(valueSetBundleFile, JSON.stringify(bundle), 'utf8');
+fs.writeFileSync(valueSetBundleFile, JSON.stringify(bundle, null, 2), 'utf8');
 logger.info(`wrote ValueSet bundle to ${valueSetBundleFile}`);
 
 logger.info('running ELM translation');
 (async () => {
   try {
     const elm = await convertBasicCQL(library.cql);
-    const elmString = JSON.stringify(elm);
+    const elmString = JSON.stringify(elm, null, 2);
     library.resource.content!.push({
       contentType: 'application/elm+json',
       data: Base64.encode(elmString)
@@ -66,7 +70,7 @@ logger.info('running ELM translation');
     logger.info(`wrote ELM output to ${outputELMFile}`);
 
     const outputLibraryFile = path.join(program.output, `${igJson.name}-library.json`);
-    fs.writeFileSync(outputLibraryFile, JSON.stringify(library.resource), 'utf8');
+    fs.writeFileSync(outputLibraryFile, JSON.stringify(library.resource, null, 2), 'utf8');
     logger.info(`wrote FHIR Library to ${outputLibraryFile}`);
   } catch (e) {
     logger.error('error translation CQL to ELM');

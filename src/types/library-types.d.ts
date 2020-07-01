@@ -34,4 +34,5 @@ export interface CQLResource {
 export interface Library {
   cql: string;
   resource: R4.ILibrary;
+  questionnaire: R4.IQuestionnaire;
 }
