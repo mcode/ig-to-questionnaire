@@ -37,6 +37,7 @@ export abstract class Handler {
   structureDef: R4.IStructureDefinition;
   valueSets: ValueSetObject[];
 
+
   constructor(structureDef: R4.IStructureDefinition, valueSets: ValueSetObject[]) {
     this.structureDef = structureDef;
     this.valueSets = valueSets;
@@ -44,8 +45,8 @@ export abstract class Handler {
 
   abstract process(): CQLResource;
 
-  getCodeRestriction(resourceType: string): CQLCodeDefinition | null {
-    const query = `snapshot.element.where(id = '${resourceType}.code').patternCodeableConcept.coding`;
+  getCodeRestriction(resourceType: string, attribute = 'code'): CQLCodeDefinition | null {
+    const query = `snapshot.element.where(id = '${resourceType}.${attribute}').patternCodeableConcept.coding`;
     const code = fhirpath.evaluate(this.structureDef, query)[0];
 
     return code
@@ -58,8 +59,8 @@ export abstract class Handler {
       : null;
   }
 
-  getValueSetRestriction(resourceType: string): CQLDefinition | null {
-    const query = `snapshot.element.where(id = '${resourceType}.code').binding.valueSet`;
+  getValueSetRestriction(resourceType: string, attribute = 'code'): CQLDefinition | null {
+    const query = `snapshot.element.where(id = '${resourceType}.${attribute}').binding.valueSet`;
     const valueSet = fhirpath.evaluate(this.structureDef, query)[0];
 
     if (valueSet) {
@@ -143,3 +144,9 @@ export function createHandler(structureDef: R4.IStructureDefinition, valueSets: 
       return null;
   }
 }
+
+export const handlerLookup: { [key: string]: typeof Handler } = {
+  'Condition': ConditionHandler,
+  'Observation': ObservationHandler,
+};
+
