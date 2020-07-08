@@ -91,18 +91,21 @@ export class LibraryBuilder {
 
       //const resourceHandler: Handler | null = createHandler(structureDef, this.valueSets);
 
-      
-      const resourceHandlerClass : typeof Handler = handlerLookup[structureDef.type];
+      //This is hardcoded for the resource types that we can handle now.
+      //We should expand upon this or find a better error handling method soon.
+      if (structureDef.type == ('Condition' || 'Observation') ) {
+        const resourceHandlerClass : typeof Handler = handlerLookup[structureDef.type];
 
-      const resourceHandler  = new resourceHandlerClass(structureDef, this.valueSets);
+        const resourceHandler: Handler | null  = new resourceHandlerClass(structureDef, this.valueSets);
 
-
-
-
-
-      if (resourceHandler !== null) {
-        resources.push(resourceHandler.process());
+        if (resourceHandler !== null) {
+          resources.push(resourceHandler.process());
+        }
       }
+      else {
+        logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
+      }
+
     });
     return resources;
   }

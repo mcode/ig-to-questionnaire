@@ -2,7 +2,6 @@ import { R4 } from '@ahryman40k/ts-fhir-types';
 import { ValueSetObject, CQLResource, CQLCodeDefinition, CQLDefinition } from '../types/library-types';
 // @ts-ignore: fhirpath does not have any types published
 import fhirpath from 'fhirpath';
-import { logger } from './logger';
 
 function getCodeDataRequirement(resourceType: string, code: R4.ICoding): R4.IDataRequirement {
   return {
@@ -37,13 +36,33 @@ export class Handler {
   structureDef: R4.IStructureDefinition;
   valueSets: ValueSetObject[];
 
-
   constructor(structureDef: R4.IStructureDefinition, valueSets: ValueSetObject[]) {
     this.structureDef = structureDef;
     this.valueSets = valueSets;
   }
 
-  abstract process(): CQLResource;
+  process(): CQLResource {
+    const retVal: CQLResource = { definitions: [], codes: [] };
+    const resourceType = this.structureDef.type;
+    const codeRestriction = this.getCodeRestriction(resourceType!);
+    const valueSetRestriction = this.getValueSetRestriction(resourceType!);
+
+    if (codeRestriction !== null) {
+      retVal.codes.push(codeRestriction);
+      retVal.definitions.push({
+          name: this.structureDef.name ?? '',
+          resourceType: resourceType!,
+          lookupName: codeRestriction.name,
+          dataRequirement: codeRestriction.dataRequirement
+        });
+    }
+
+    if (valueSetRestriction != null) {
+      retVal.definitions.push(valueSetRestriction);
+    }
+
+    return retVal;
+  }
 
   getCodeRestriction(resourceType: string, attribute = 'code'): CQLCodeDefinition | null {
     const query = `snapshot.element.where(id = '${resourceType}.${attribute}').patternCodeableConcept.coding`;
@@ -80,76 +99,7 @@ export class Handler {
   }
 }
 
-export class BaseHandler extends Handler {
-  process() {
-    const retVal: CQLResource = { definitions: [], codes: [] };
-    const resourceType = this.structureDef.type;
-    const codeRestriction = this.getCodeRestriction(resourceType!);
-    const valueSetRestriction = this.getValueSetRestriction(resourceType!);
-
-    if (codeRestriction !== null) {
-      retVal.codes.push(codeRestriction);
-      retVal.definitions.push({
-          name: this.structureDef.name ?? '',
-          resourceType: resourceType!,
-          lookupName: codeRestriction.name,
-          dataRequirement: codeRestriction.dataRequirement
-        });
-    }
-
-    if (valueSetRestriction != null) {
-      retVal.definitions.push(valueSetRestriction);
-    }
-
-    return retVal;
-  }
-}
-
-
-class ConditionHandler extends Handler {
-  process() {
-    const retVal: CQLResource = { definitions: [], codes: [] };
-    const codeRestriction = this.getCodeRestriction('Condition');
-    const valueSetRestriction = this.getValueSetRestriction('Condition');
-
-    if (codeRestriction !== null) {
-      retVal.codes.push(codeRestriction);
-      retVal.definitions.push({
-        name: this.structureDef.name ?? '',
-        resourceType: 'Condition',
-        lookupName: codeRestriction.name,
-        dataRequirement: codeRestriction.dataRequirement
-      });
-    }
-
-    if (valueSetRestriction !== null) {
-      retVal.definitions.push(valueSetRestriction);
-    }
-
-    return retVal;
-  }
-}
-
-/*
-export function createHandler(structureDef: R4.IStructureDefinition, valueSets: ValueSetObject[]): Handler | null {
-  switch (structureDef.type) {
-    case 'Condition':
-      return new ConditionHandler(structureDef, valueSets);
-    case 'Observation':
-      return new ObservationHandler(structureDef, valueSets);
-    case 'DiagnosticReport':
-    case 'MedicationStatement':
-    case 'Patient':
-    case 'Procedure':
-    case 'Specimen':
-    default:
-      logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
-      return null;
-  }
-}
-*/
-
 export const handlerLookup: { [key: string]: typeof Handler } = {
-  'Condition': BaseHandler,
-  'Observation': BaseHandler,
+  'Condition': Handler,
+  'Observation': Handler,
 };
