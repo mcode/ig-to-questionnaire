@@ -33,7 +33,7 @@ function getValueSetDataRequirement(resourceType: string, vsId: string): R4.IDat
   };
 }
 
-export abstract class Handler {
+export class Handler {
   structureDef: R4.IStructureDefinition;
   valueSets: ValueSetObject[];
 
@@ -80,6 +80,32 @@ export abstract class Handler {
   }
 }
 
+export class BaseHandler extends Handler {
+  process() {
+    const retVal: CQLResource = { definitions: [], codes: [] };
+    const resourceType = this.structureDef.type;
+    const codeRestriction = this.getCodeRestriction(resourceType!);
+    const valueSetRestriction = this.getValueSetRestriction(resourceType!);
+
+    if (codeRestriction !== null) {
+      retVal.codes.push(codeRestriction);
+      retVal.definitions.push({
+          name: this.structureDef.name ?? '',
+          resourceType: resourceType!,
+          lookupName: codeRestriction.name,
+          dataRequirement: codeRestriction.dataRequirement
+        });
+    }
+
+    if (valueSetRestriction != null) {
+      retVal.definitions.push(valueSetRestriction);
+    }
+
+    return retVal;
+  }
+}
+
+
 class ConditionHandler extends Handler {
   process() {
     const retVal: CQLResource = { definitions: [], codes: [] };
@@ -104,30 +130,7 @@ class ConditionHandler extends Handler {
   }
 }
 
-class ObservationHandler extends Handler {
-  process() {
-    const retVal: CQLResource = { definitions: [], codes: [] };
-    const codeRestriction = this.getCodeRestriction('Observation');
-    const valueSetRestriction = this.getValueSetRestriction('Observation');
-
-    if (codeRestriction !== null) {
-      retVal.codes.push(codeRestriction);
-      retVal.definitions.push({
-        name: this.structureDef.name ?? '',
-        resourceType: 'Observation',
-        lookupName: codeRestriction.name,
-        dataRequirement: codeRestriction.dataRequirement
-      });
-    }
-
-    if (valueSetRestriction !== null) {
-      retVal.definitions.push(valueSetRestriction);
-    }
-
-    return retVal;
-  }
-}
-
+/*
 export function createHandler(structureDef: R4.IStructureDefinition, valueSets: ValueSetObject[]): Handler | null {
   switch (structureDef.type) {
     case 'Condition':
@@ -144,9 +147,9 @@ export function createHandler(structureDef: R4.IStructureDefinition, valueSets: 
       return null;
   }
 }
+*/
 
 export const handlerLookup: { [key: string]: typeof Handler } = {
-  'Condition': ConditionHandler,
-  'Observation': ObservationHandler,
+  'Condition': BaseHandler,
+  'Observation': BaseHandler,
 };
-
