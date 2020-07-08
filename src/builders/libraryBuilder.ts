@@ -89,11 +89,9 @@ export class LibraryBuilder {
 
       logger.debug(`generating CQL definitions for profile ${structureDef.name}`);
 
-      //const resourceHandler: Handler | null = createHandler(structureDef, this.valueSets);
-
       //This is hardcoded for the resource types that we can handle now.
       //We should expand upon this or find a better error handling method soon.
-      if (structureDef.type == ('Condition' || 'Observation') ) {
+      if (structureDef.type == 'Condition' || structureDef.type == 'Observation') {
         const resourceHandlerClass : typeof Handler = handlerLookup[structureDef.type];
 
         const resourceHandler: Handler | null  = new resourceHandlerClass(structureDef, this.valueSets);
