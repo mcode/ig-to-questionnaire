@@ -20,7 +20,7 @@
         "reference": {
           "reference": "StructureDefinition/example-observation"
         },
-        "name": "Example Observation",
+        "name": "ExampleObservation",
         "description": "An Example Observation",
         "exampleBoolean": false
       },
@@ -34,7 +34,7 @@
         "reference": {
           "reference": "StructureDefinition/example-condition"
         },
-        "name": "Example Condition",
+        "name": "ExampleCondition",
         "description": "An Example Condition",
         "exampleBoolean": false
       },

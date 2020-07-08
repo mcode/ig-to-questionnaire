@@ -1,0 +1,40 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "example",
+  "title": "example",
+  "status": "draft",
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/cqf-library",
+      "valueCanonical": "Library/example"
+    }
+  ],
+  "item": [
+    {
+      "linkId": "ExampleObservation",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+          "valueExpression": {
+            "language": "text/cql",
+            "expression": "\"example\".ExampleObservation"
+          }
+        }
+      ],
+      "type": "string"
+    },
+    {
+      "linkId": "ExampleCondition",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+          "valueExpression": {
+            "language": "text/cql",
+            "expression": "\"example\".ExampleCondition"
+          }
+        }
+      ],
+      "type": "string"
+    }
+  ]
+}

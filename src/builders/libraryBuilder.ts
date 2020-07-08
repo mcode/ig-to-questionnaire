@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { ValueSetObject, ImplementationGuide, CQLResource, Library } from '../types/library-types';
 import { Handler, createHandler } from '../helpers/resourceHandlers';
+import { QuestionnaireBuilder } from './questionnaireBuilder';
 import { logger } from '../helpers/logger';
 
 const CODE_SYSTEMS: { [key: string]: string } = {
@@ -17,6 +18,7 @@ export class LibraryBuilder {
   valueSets: ValueSetObject[];
   resources: CQLResource[];
   fhirLibrary: R4.ILibrary;
+  questionnaireBuilder: QuestionnaireBuilder;
 
   constructor(igDir: string, igJson: R4.IImplementationGuide) {
     this.igDir = igDir;
@@ -46,6 +48,7 @@ export class LibraryBuilder {
       dataRequirement: [],
       content: []
     };
+    this.questionnaireBuilder = new QuestionnaireBuilder(this.ig.name);
   }
 
   getIdFromReference(r: R4.IReference): string {
@@ -125,6 +128,7 @@ export class LibraryBuilder {
       r.definitions.forEach(d => {
         cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
         this.fhirLibrary.dataRequirement!.push(d.dataRequirement);
+        this.questionnaireBuilder.addCqfExpression(d.name);
       });
     });
 
@@ -135,7 +139,8 @@ export class LibraryBuilder {
 
     return {
       cql,
-      resource: this.fhirLibrary
+      resource: this.fhirLibrary,
+      questionnaire: this.questionnaireBuilder.questionnaire
     };
   }
 }
