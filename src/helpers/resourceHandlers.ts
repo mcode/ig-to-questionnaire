@@ -50,11 +50,11 @@ export class Handler {
     if (codeRestriction !== null) {
       retVal.codes.push(codeRestriction);
       retVal.definitions.push({
-          name: this.structureDef.name ?? '',
-          resourceType: resourceType!,
-          lookupName: codeRestriction.name,
-          dataRequirement: codeRestriction.dataRequirement
-        });
+        name: this.structureDef.name ?? '',
+        resourceType: resourceType!,
+        lookupName: codeRestriction.name,
+        dataRequirement: codeRestriction.dataRequirement
+      });
     }
 
     if (valueSetRestriction != null) {
@@ -100,6 +100,6 @@ export class Handler {
 }
 
 export const handlerLookup: { [key: string]: typeof Handler } = {
-  'Condition': Handler,
-  'Observation': Handler,
+  Condition: Handler,
+  Observation: Handler
 };

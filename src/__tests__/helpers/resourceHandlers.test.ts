@@ -1,5 +1,5 @@
 import { R4 } from '@ahryman40k/ts-fhir-types';
-import { createHandler } from '../../helpers/resourceHandlers';
+import { handlerLookup } from '../../helpers/resourceHandlers';
 import exampleObservation from '../mock-ig/site/StructureDefinition-example-observation.json';
 import exampleCondition from '../mock-ig/site/StructureDefinition-example-condition.json';
 import { CQLResource } from '../../types/library-types';
@@ -77,7 +77,8 @@ const EXPECTED_CONDITION_DEFINITIONS: CQLResource = {
 };
 
 test('test handler for Observation', () => {
-  const handler = createHandler(<R4.IStructureDefinition>exampleObservation, MOCK_VALUESET_MAP);
+  const resourceHandlerClass = handlerLookup['Observation'];
+  const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleObservation, MOCK_VALUESET_MAP);
   expect(handler).toBeDefined();
 
   const result = handler!.process();
@@ -85,7 +86,9 @@ test('test handler for Observation', () => {
 });
 
 test('test handler for Condition', () => {
-  const handler = createHandler(<R4.IStructureDefinition>exampleCondition, MOCK_VALUESET_MAP);
+  const resourceHandlerClass = handlerLookup['Condition'];
+  const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleCondition, MOCK_VALUESET_MAP);
+
   expect(handler).toBeDefined();
 
   const result = handler!.process();
