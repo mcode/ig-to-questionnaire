@@ -91,11 +91,8 @@ export class LibraryBuilder {
 
       if (structureDef.type in handlerLookup) {
         const resourceHandlerClass : typeof Handler = handlerLookup[structureDef.type];
-        const resourceHandler: Handler | null  = new resourceHandlerClass(structureDef, this.valueSets);
-
-        if (resourceHandler !== null) {
-          resources.push(resourceHandler.process());
-        }
+        const resourceHandler: Handler = new resourceHandlerClass(structureDef, this.valueSets);
+        resources.push(resourceHandler.process());
       }
       else {
         logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
