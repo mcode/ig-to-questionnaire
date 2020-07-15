@@ -1,0 +1,59 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "example-observation",
+  "url": "http://example.com/StructureDefinition/mcode-cancer-disease-status",
+  "version": "0.0.1",
+  "name": "ExampleObservation",
+  "title": "ExampleObservation",
+  "status": "draft",
+  "fhirVersion": "4.0.0",
+  "kind": "resource",
+  "abstract": false,
+  "type": "Observation",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Observation",
+  "derivation": "constraint",
+  "snapshot": {
+    "element": [
+      {
+        "id": "Observation.code",
+        "path": "Observation.code",
+        "short": "Type of observation (code / type)",
+        "definition": "Describes what was observed. Sometimes this is called the observation \"name\".",
+        "comment": "*All* code-value and, if present, component.code-component.value pairs need to be taken into account to correctly understand the meaning of the observation.",
+        "requirements": "Knowing what kind of observation is being made is essential to understanding the observation.",
+        "alias": ["Name"],
+        "min": 1,
+        "max": "1",
+        "base": {
+          "path": "Observation.code",
+          "min": 1,
+          "max": "1"
+        },
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "patternCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "88040-1"
+            }
+          ]
+        },
+        "binding": {
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+              "valueString": "ObservationCode"
+            }
+          ],
+          "strength": "example",
+          "description": "Codes identifying names of simple observations.",
+          "valueSet": "http://hl7.org/fhir/ValueSet/observation-codes"
+        }
+      }
+    ]
+  }
+}
