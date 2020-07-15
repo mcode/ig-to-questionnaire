@@ -31,7 +31,7 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@ahryman40k/ts-fhir-types": "^4.0.25",
+    "@ahryman40k/ts-fhir-types": "^4.0.32",
     "@types/jest": "^26.0.0",
     "@types/js-base64": "^2.3.1",
     "@types/lodash": "^4.14.155",

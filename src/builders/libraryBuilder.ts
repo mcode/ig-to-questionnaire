@@ -4,8 +4,8 @@ import path from 'path';
 import _ from 'lodash';
 import { R4 } from '@ahryman40k/ts-fhir-types';
 import { ValueSetObject, ImplementationGuide, CQLResource, Library } from '../types/library-types';
-import { Handler, createHandler } from '../helpers/resourceHandlers';
 import { QuestionnaireBuilder } from './questionnaireBuilder';
+import { Handler, handlerLookup } from '../helpers/resourceHandlers';
 import { logger } from '../helpers/logger';
 
 const CODE_SYSTEMS: { [key: string]: string } = {
@@ -89,9 +89,13 @@ export class LibraryBuilder {
 
       logger.debug(`generating CQL definitions for profile ${structureDef.name}`);
 
-      const resourceHandler: Handler | null = createHandler(structureDef, this.valueSets);
-      if (resourceHandler !== null) {
+      if (structureDef.type in handlerLookup) {
+        const resourceHandlerClass : typeof Handler = handlerLookup[structureDef.type];
+        const resourceHandler: Handler = new resourceHandlerClass(structureDef, this.valueSets);
         resources.push(resourceHandler.process());
+      }
+      else {
+        logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
       }
     });
     return resources;
