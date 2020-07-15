@@ -91,7 +91,7 @@ export class LibraryBuilder {
 
       if (structureDef.type in handlerLookup) {
         const resourceHandlerClass : typeof Handler = handlerLookup[structureDef.type];
-        const resourceHandler: Handler  = new resourceHandlerClass(structureDef, this.valueSets);
+        const resourceHandler: Handler = new resourceHandlerClass(structureDef, this.valueSets);
         resources.push(resourceHandler.process());
       }
       else {
