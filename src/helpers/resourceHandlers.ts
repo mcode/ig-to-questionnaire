@@ -101,5 +101,6 @@ export class Handler {
 
 export const handlerLookup: { [key: string]: typeof Handler } = {
   Condition: Handler,
-  Observation: Handler
+  Observation: Handler,
+  Procedure: Handler
 };
