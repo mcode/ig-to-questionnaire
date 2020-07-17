@@ -1,0 +1,44 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "example-procedure",
+    "url": "http://example.com/StructureDefinition/example-procedure",
+    "version": "0.0.1",
+    "name": "ExampleProcedure",
+    "title": "ExampleProcedure",
+    "status": "draft",
+    "fhirVersion": "4.0.0",
+    "kind": "resource",
+    "abstract": false,
+    "type": "Procedure",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Procedure",
+    "derivation": "constraint",
+    "snapshot": {
+      "element": [
+        {
+          "id": "Procedure.code",
+          "path": "Procedure.code",
+          "short": "Procedure codes from SNOMED CT, CPT, or HCPCS II",
+          "definition": "The specific procedure that is performed. Use text if the exact nature of the procedure cannot be coded (e.g. \"Laparoscopic Appendectomy\").",
+          "requirements": "0..1 to account for primarily narrative only resources.",
+          "alias": ["type"],
+          "min": 1,
+          "max": "1",
+          "base": {
+            "path": "Procedure.code",
+            "min": 0,
+            "max": "1"
+          },
+          "type": [
+            {
+              "code": "CodeableConcept"
+            }
+          ],
+          "binding": {
+            "strength": "extensible",
+            "valueSet": "http://example.com/ValueSet/example-valueset"
+          }
+        }
+      ]
+    }
+  }
+  

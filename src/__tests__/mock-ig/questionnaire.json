@@ -35,6 +35,19 @@
         }
       ],
       "type": "string"
+    },
+    {
+      "linkId": "ExampleProcedure",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+          "valueExpression": {
+            "language": "text/cql",
+            "expression": "\"example\".ExampleProcedure"
+          }
+        }
+      ],
+      "type": "string"
     }
   ]
 }

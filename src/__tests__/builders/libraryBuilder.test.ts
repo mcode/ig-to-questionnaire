@@ -21,6 +21,9 @@ define "ExampleObservation":
 
 define "ExampleCondition":
     [Condition: "Example ValueSet"]
+
+define "ExampleProcedure":
+    [Procedure: "Example ValueSet"]
 `;
 
 const libraryBuilder = new LibraryBuilder(MOCK_IG_DIR, <R4.IImplementationGuide>implementationGuide);
