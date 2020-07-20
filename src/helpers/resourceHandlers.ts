@@ -104,7 +104,7 @@ export class SpecimenHandler extends Handler {
     const retVal: CQLResource = { definitions: [], codes: [] };
     const resourceType = this.structureDef.type;
     const codeRestriction = this.getCodeRestriction(resourceType!);
-    const valueSetRestriction = this.getValueSetRestriction(resourceType!,'type');
+    const valueSetRestriction = this.getValueSetRestriction(resourceType!, 'type');
 
     if (codeRestriction !== null) {
       retVal.codes.push(codeRestriction);

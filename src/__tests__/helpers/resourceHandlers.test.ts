@@ -3,6 +3,7 @@ import { handlerLookup } from '../../helpers/resourceHandlers';
 import exampleObservation from '../mock-ig/site/StructureDefinition-example-observation.json';
 import exampleCondition from '../mock-ig/site/StructureDefinition-example-condition.json';
 import exampleProcedure from '../mock-ig/site/StructureDefinition-example-procedure.json';
+import exampleSpecimen from '../mock-ig/site/StructureDefinition-example-specimen.json';
 import { CQLResource } from '../../types/library-types';
 
 const MOCK_VALUESET_MAP = [
@@ -97,6 +98,26 @@ const EXPECTED_PROCEDURE_DEFINITIONS: CQLResource = {
   codes: []
 };
 
+const EXPECTED_SPECIMEN_DEFINITIONS: CQLResource = {
+  definitions: [
+    {
+      name: 'ExampleSpecimen',
+      resourceType: 'Specimen',
+      lookupName: 'Example ValueSet',
+      dataRequirement: {
+        type: 'Specimen',
+        codeFilter: [
+          {
+            path: 'code',
+            valueSet: 'example-valueset'
+          }
+        ]
+      }
+    }
+  ],
+  codes: []
+};
+
 test('test handler for Observation', () => {
   const resourceHandlerClass = handlerLookup['Observation'];
   const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleObservation, MOCK_VALUESET_MAP);
@@ -124,4 +145,14 @@ test('test handler for Procedure', () => {
 
   const result = handler!.process();
   expect(result).toEqual(EXPECTED_PROCEDURE_DEFINITIONS);
+});
+
+test('test handler for Specimen', () => {
+  const resourceHandlerClass = handlerLookup['Specimen'];
+  const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleSpecimen, MOCK_VALUESET_MAP);
+
+  expect(handler).toBeDefined();
+
+  const result = handler!.process();
+  expect(result).toEqual(EXPECTED_SPECIMEN_DEFINITIONS);
 });
