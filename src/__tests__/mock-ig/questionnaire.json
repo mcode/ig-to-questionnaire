@@ -61,6 +61,19 @@
         }
       ],
       "type": "string"
+    },
+    {
+      "linkId": "ExampleDiagnosticReport",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+          "valueExpression": {
+            "language": "text/cql",
+            "expression": "\"example\".ExampleDiagnosticReport"
+          }
+        }
+      ],
+      "type": "string"
     }
   ]
 }

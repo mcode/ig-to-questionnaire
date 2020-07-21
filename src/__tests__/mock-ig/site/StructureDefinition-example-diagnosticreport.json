@@ -1,0 +1,60 @@
+{
+    "resourceType": "StructureDefinition",
+    "id": "example-diagnosticreport",
+    "url": "http://example.com/StructureDefinition/example-diagnosticreport",
+    "version": "0.0.1",
+    "name": "ExampleDiagnosticReport",
+    "title": "ExampleDiagnosticReport",
+    "status": "draft",
+    "fhirVersion": "4.0.0",
+    "kind": "resource",
+    "abstract": false,
+    "type": "DiagnosticReport",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/us-core-diagnosticreport-lab",
+    "derivation": "constraint",
+    "snapshot": {
+      "element": [
+        {
+          "id": "DiagnosticReport.code",
+          "path": "DiagnosticReport.code",
+          "short": "US Core Laboratory Report Order Code",
+          "definition": "The test, panel or battery that was ordered.",
+          "comment": "UsageNote= The typical patterns for codes are:  1)  a LOINC code either as a  translation from a \"local\" code or as a primary code, or 2)  a local code only if no suitable LOINC exists,  or 3)  both the local and the LOINC translation.   Systems SHALL be capable of sending the local code if one exists.",
+          "requirements": "0..1 to account for primarily narrative only resources.",
+          "alias": ["type"],
+          "min": 1,
+          "max": "1",
+          "base": {
+            "path": "DiagnosticReport.code",
+            "min": 1,
+            "max": "1"
+          },
+          "type": [
+            {
+              "code": "CodeableConcept"
+            }
+          ],
+          "patternCodeableConcept": {
+            "coding": [
+              {
+                "system": "http://loinc.org",
+                "code": "81247-9"
+              }
+            ]
+          },
+          "binding": {
+            "extension": [
+              {
+                "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-bindingName",
+                "valueString": "ObservationCode"
+              }
+            ],
+            "strength": "extensible",
+            "description": "LOINC codes",
+            "valueSet": "http://hl7.org/fhir/us/core/ValueSet/us-core-diagnosticreport-lab-codes"
+          }
+        }
+      ]
+    }
+  }
+  
