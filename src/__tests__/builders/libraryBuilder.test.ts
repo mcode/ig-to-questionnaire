@@ -24,7 +24,10 @@ define "ExampleCondition":
 
 define "ExampleProcedure":
     [Procedure: "Example ValueSet"]
-`;
+
+define "ExampleSpecimen":
+    [Specimen: "Example ValueSet"]
+    `;
 
 const libraryBuilder = new LibraryBuilder(MOCK_IG_DIR, <R4.IImplementationGuide>implementationGuide);
 const { cql, resource, questionnaire } = libraryBuilder.buildLibrary();

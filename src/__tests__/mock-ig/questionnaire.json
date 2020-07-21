@@ -48,6 +48,19 @@
         }
       ],
       "type": "string"
+    },
+    {
+      "linkId": "ExampleSpecimen",
+      "extension": [
+        {
+          "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+          "valueExpression": {
+            "language": "text/cql",
+            "expression": "\"example\".ExampleSpecimen"
+          }
+        }
+      ],
+      "type": "string"
     }
   ]
 }
