@@ -26,7 +26,6 @@ export class LibraryBuilder {
     this.name = name;
     this.ig = {
       json: igJson,
-      //name: igJson.name ?? 'ImplementationGuide',
       name: this.name,
       version: igJson.version ?? '1.0.0',
       fhirVersion: '4.0.0' // FIXME: Hardcoding until translation supports 4.0.1
@@ -36,9 +35,7 @@ export class LibraryBuilder {
     this.resources = this.getResources();
     this.fhirLibrary = {
       resourceType: 'Library',
-      //id: this.ig.name,
       id: this.name,
-      //name: this.ig.name,
       version: this.ig.version,
       type: {
         coding: [
@@ -52,7 +49,6 @@ export class LibraryBuilder {
       dataRequirement: [],
       content: []
     };
-    //this.questionnaireBuilder = new QuestionnaireBuilder(this.ig.name);
     this.questionnaireBuilder = new QuestionnaireBuilder(this.name);
   }
 

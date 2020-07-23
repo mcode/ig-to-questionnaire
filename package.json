@@ -52,7 +52,6 @@
     "cql-translation-service-client": "^0.5.0",
     "fhirpath": "^2.2.1",
     "js-base64": "^2.5.2",
-    "lint": "^0.7.0",
     "lodash": "^4.17.19",
     "winston": "^3.2.1"
   }
