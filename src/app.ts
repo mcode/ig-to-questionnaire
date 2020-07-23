@@ -35,10 +35,10 @@ if (!igFile) {
 
 logger.info(`parsing ${igFile}`);
 const igJson = JSON.parse(fs.readFileSync(path.join(igDir, igFile), 'utf8'));
-const builder = new LibraryBuilder(igDir, igJson);
-const library = builder.buildLibrary();
 
 const whichName = program.libname ?? igJson.name;
+const builder = new LibraryBuilder(igDir, igJson, whichName);
+const library = builder.buildLibrary();
 
 const outputCQLFile = path.join(program.output, `${whichName}.cql`);
 fs.writeFileSync(outputCQLFile, library.cql, 'utf8');
