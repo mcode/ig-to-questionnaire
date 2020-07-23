@@ -19,12 +19,15 @@ export class LibraryBuilder {
   resources: CQLResource[];
   fhirLibrary: R4.ILibrary;
   questionnaireBuilder: QuestionnaireBuilder;
+  name: string;
 
-  constructor(igDir: string, igJson: R4.IImplementationGuide) {
+  constructor(igDir: string, igJson: R4.IImplementationGuide, name: string) {
     this.igDir = igDir;
+    this.name = name;
     this.ig = {
       json: igJson,
-      name: igJson.name ?? 'ImplementationGuide',
+      //name: igJson.name ?? 'ImplementationGuide',
+      name: this.name,
       version: igJson.version ?? '1.0.0',
       fhirVersion: '4.0.0' // FIXME: Hardcoding until translation supports 4.0.1
       //fhirVersion: igJson.fhirVersion![0]
@@ -33,8 +36,9 @@ export class LibraryBuilder {
     this.resources = this.getResources();
     this.fhirLibrary = {
       resourceType: 'Library',
-      id: this.ig.name,
-      name: this.ig.name,
+      //id: this.ig.name,
+      id: this.name,
+      //name: this.ig.name,
       version: this.ig.version,
       type: {
         coding: [
@@ -48,7 +52,8 @@ export class LibraryBuilder {
       dataRequirement: [],
       content: []
     };
-    this.questionnaireBuilder = new QuestionnaireBuilder(this.ig.name);
+    //this.questionnaireBuilder = new QuestionnaireBuilder(this.ig.name);
+    this.questionnaireBuilder = new QuestionnaireBuilder(this.name);
   }
 
   getIdFromReference(r: R4.IReference): string {
