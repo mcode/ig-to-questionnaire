@@ -10,7 +10,7 @@ import { bundlify } from './helpers/bundler';
 program
   .requiredOption('-i --ig <path-to-ig>', 'Path to full IG directory')
   .option('-o --output <path-to-output-dir>', 'Path to desired output directory', './output')
-  .option('-o --libname <path-to-library>', 'Path to library', './libname')
+  .option('-o --libname <path-to-library>', 'Path to library')
   .usage('--ig <path-to-ig-directory>')
   .parse(process.argv);
 
