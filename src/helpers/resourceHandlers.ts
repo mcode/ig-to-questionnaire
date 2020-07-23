@@ -128,5 +128,6 @@ export const handlerLookup: { [key: string]: typeof Handler } = {
   Condition: Handler,
   Observation: Handler,
   Procedure: Handler,
+  DiagnosticReport: Handler,
   Specimen: SpecimenHandler
 };

@@ -4,6 +4,7 @@ import exampleObservation from '../mock-ig/site/StructureDefinition-example-obse
 import exampleCondition from '../mock-ig/site/StructureDefinition-example-condition.json';
 import exampleProcedure from '../mock-ig/site/StructureDefinition-example-procedure.json';
 import exampleSpecimen from '../mock-ig/site/StructureDefinition-example-specimen.json';
+import exampleDiagnosticReport from '../mock-ig/site/StructureDefinition-example-diagnosticreport.json';
 import { CQLResource } from '../../types/library-types';
 
 const MOCK_VALUESET_MAP = [
@@ -118,6 +119,51 @@ const EXPECTED_SPECIMEN_DEFINITIONS: CQLResource = {
   codes: []
 };
 
+const EXPECTED_DIAGNOSTICREPORT_DEFINITIONS: CQLResource = {
+  definitions: [
+    {
+      name: 'ExampleDiagnosticReport',
+      resourceType: 'DiagnosticReport',
+      lookupName: 'ExampleDiagnosticReport Code',
+      dataRequirement: {
+        type: 'DiagnosticReport',
+        codeFilter: [
+          {
+            path: 'code',
+            code: [
+              {
+                code: '81247-9',
+                system: 'http://loinc.org'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  codes: [
+    {
+      name: 'ExampleDiagnosticReport Code',
+      code: '81247-9',
+      system: 'http://loinc.org',
+      dataRequirement: {
+        type: 'DiagnosticReport',
+        codeFilter: [
+          {
+            path: 'code',
+            code: [
+              {
+                code: '81247-9',
+                system: 'http://loinc.org'
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+};
+
 test('test handler for Observation', () => {
   const resourceHandlerClass = handlerLookup['Observation'];
   const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleObservation, MOCK_VALUESET_MAP);
@@ -155,4 +201,14 @@ test('test handler for Specimen', () => {
 
   const result = handler!.process();
   expect(result).toEqual(EXPECTED_SPECIMEN_DEFINITIONS);
+});
+
+test('test handler for DiagnosticReport', () => {
+  const resourceHandlerClass = handlerLookup['DiagnosticReport'];
+  const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleDiagnosticReport, MOCK_VALUESET_MAP);
+
+  expect(handler).toBeDefined();
+
+  const result = handler!.process();
+  expect(result).toEqual(EXPECTED_DIAGNOSTICREPORT_DEFINITIONS);
 });

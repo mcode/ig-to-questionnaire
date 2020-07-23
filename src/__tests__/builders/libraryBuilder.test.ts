@@ -16,6 +16,8 @@ valueset "Example ValueSet": 'example-valueset'
 
 code "ExampleObservation Code": '88040-1' from "LOINC"
 
+code "ExampleDiagnosticReport Code": '81247-9' from "LOINC"
+
 define "ExampleObservation":
     [Observation: "ExampleObservation Code"]
 
@@ -27,6 +29,9 @@ define "ExampleProcedure":
 
 define "ExampleSpecimen":
     [Specimen: "Example ValueSet"]
+
+define "ExampleDiagnosticReport":
+    [DiagnosticReport: "ExampleDiagnosticReport Code"]
     `;
 
 const libraryBuilder = new LibraryBuilder(MOCK_IG_DIR, <R4.IImplementationGuide>implementationGuide);
