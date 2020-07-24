@@ -10,6 +10,7 @@ import { bundlify } from './helpers/bundler';
 program
   .requiredOption('-i --ig <path-to-ig>', 'Path to full IG directory')
   .option('-o --output <path-to-output-dir>', 'Path to desired output directory', './output')
+  .option('-o --libname <path-to-library>', 'Path to library')
   .usage('--ig <path-to-ig-directory>')
   .parse(process.argv);
 
@@ -34,14 +35,16 @@ if (!igFile) {
 
 logger.info(`parsing ${igFile}`);
 const igJson = JSON.parse(fs.readFileSync(path.join(igDir, igFile), 'utf8'));
-const builder = new LibraryBuilder(igDir, igJson);
+
+const whichName = program.libname ?? igJson.name;
+const builder = new LibraryBuilder(igDir, igJson, whichName);
 const library = builder.buildLibrary();
 
-const outputCQLFile = path.join(program.output, `${igJson.name}.cql`);
+const outputCQLFile = path.join(program.output, `${whichName}.cql`);
 fs.writeFileSync(outputCQLFile, library.cql, 'utf8');
 logger.info(`wrote CQL output to ${outputCQLFile}`);
 
-const outputQuestionnaireFile = path.join(program.output, `${igJson.name}-questionnaire.json`);
+const outputQuestionnaireFile = path.join(program.output, `${whichName}-questionnaire.json`);
 fs.writeFileSync(outputQuestionnaireFile, JSON.stringify(library.questionnaire, null, 2), 'utf8');
 logger.info(`wrote FHIR Questionnaire to ${outputQuestionnaireFile}`);
 
@@ -52,7 +55,7 @@ const valueSets = fs
   .map((vs: string) => JSON.parse(fs.readFileSync(path.join(igDir, vs), 'utf8')));
 
 const bundle = bundlify(valueSets);
-const valueSetBundleFile = path.join(program.output, `${igJson.name}-valuesets.json`);
+const valueSetBundleFile = path.join(program.output, `${whichName}-valuesets.json`);
 fs.writeFileSync(valueSetBundleFile, JSON.stringify(bundle, null, 2), 'utf8');
 logger.info(`wrote ValueSet bundle to ${valueSetBundleFile}`);
 
@@ -65,11 +68,11 @@ logger.info('running ELM translation');
       contentType: 'application/elm+json',
       data: Base64.encode(elmString)
     });
-    const outputELMFile = path.join(program.output, `${igJson.name}-elm.json`);
+    const outputELMFile = path.join(program.output, `${whichName}-elm.json`);
     fs.writeFileSync(outputELMFile, elmString, 'utf8');
     logger.info(`wrote ELM output to ${outputELMFile}`);
 
-    const outputLibraryFile = path.join(program.output, `${igJson.name}-library.json`);
+    const outputLibraryFile = path.join(program.output, `${whichName}-library.json`);
     fs.writeFileSync(outputLibraryFile, JSON.stringify(library.resource, null, 2), 'utf8');
     logger.info(`wrote FHIR Library to ${outputLibraryFile}`);
   } catch (e) {

@@ -34,7 +34,7 @@ define "ExampleDiagnosticReport":
     [DiagnosticReport: "ExampleDiagnosticReport Code"]
     `;
 
-const libraryBuilder = new LibraryBuilder(MOCK_IG_DIR, <R4.IImplementationGuide>implementationGuide);
+const libraryBuilder = new LibraryBuilder(MOCK_IG_DIR, <R4.IImplementationGuide>implementationGuide, 'example');
 const { cql, resource, questionnaire } = libraryBuilder.buildLibrary();
 
 test('basic library info is present', () => {
