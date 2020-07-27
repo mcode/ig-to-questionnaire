@@ -96,7 +96,9 @@ export class LibraryBuilder {
         resources.push(resourceHandler.process());
       }
       else {
-        logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
+        if (structureDef.type != 'Patient') {
+          logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
+        }
       }
     });
     return resources;
