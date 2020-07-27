@@ -95,8 +95,8 @@ export class LibraryBuilder {
         const resourceHandler: Handler = new resourceHandlerClass(structureDef, this.valueSets);
         resources.push(resourceHandler.process());
       }
-      else {
-        logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
+      else if (structureDef.type !== 'Patient') {
+          logger.warn(`No handling implemented for ${structureDef.type}. Skipping ${structureDef.name}`);
       }
     });
     return resources;
