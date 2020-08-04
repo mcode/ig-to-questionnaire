@@ -1,0 +1,42 @@
+{
+  "resourceType": "StructureDefinition",
+  "id": "example-medicationstatement",
+  "url": "http://example.com/StructureDefinition/example-medicationstatement",
+  "version": "0.0.1",
+  "name": "ExampleMedicationStatement",
+  "title": "ExampleMedicationStatement",
+  "status": "draft",
+  "fhirVersion": "4.0.0",
+  "kind": "resource",
+  "abstract": false,
+  "type": "MedicationStatement",
+  "baseDefinition": "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
+  "derivation": "constraint",
+  "snapshot": {
+    "element": [
+      {
+        "id": "MedicationStatement.medication[x]:medicationCodeableConcept",
+        "path": "MedicationStatement.medication[x]",
+        "short": "What medication was taken",
+        "definition": "Identifies the medication being administered. This is either a link to a resource representing the details of the medication or a simple attribute carrying a code that identifies the medication from a known list of medications.",
+        "comment": "If only a code is specified, then it needs to be a code for a specific product. If more information is required, then the use of the medication resource is recommended.  For example, if you require form or lot number, then you must reference the Medication resource.",
+        "min": 0,
+        "max": "1",
+        "base": {
+          "path": "MedicationStatement.medication[x]",
+          "min": 1,
+          "max": "1"
+        },
+        "type": [
+          {
+            "code": "CodeableConcept"
+          }
+        ],
+        "binding": {
+          "strength": "extensible",
+          "valueSet": "http://example.com/ValueSet/example-valueset"
+        }
+      }
+    ]
+  }
+}

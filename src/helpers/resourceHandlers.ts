@@ -124,10 +124,36 @@ export class SpecimenHandler extends Handler {
   }
 }
 
+export class MedicationStatementHandler extends Handler {
+  process(): CQLResource {
+    const retVal: CQLResource = { definitions: [], codes: [] };
+    const resourceType = this.structureDef.type;
+    const codeRestriction = this.getCodeRestriction(resourceType!);
+    const valueSetRestriction = this.getValueSetRestriction(resourceType!, 'medication[x]:medicationCodeableConcept');
+
+    if (codeRestriction !== null) {
+      retVal.codes.push(codeRestriction);
+      retVal.definitions.push({
+        name: this.structureDef.name ?? '',
+        resourceType: resourceType!,
+        lookupName: codeRestriction.name,
+        dataRequirement: codeRestriction.dataRequirement
+      });
+    }
+
+    if (valueSetRestriction != null) {
+      retVal.definitions.push(valueSetRestriction);
+    }
+
+    return retVal;
+  }
+}
+
 export const handlerLookup: { [key: string]: typeof Handler } = {
   Condition: Handler,
   Observation: Handler,
   Procedure: Handler,
   DiagnosticReport: Handler,
-  Specimen: SpecimenHandler
+  Specimen: SpecimenHandler,
+  MedicationStatement: MedicationStatementHandler
 };

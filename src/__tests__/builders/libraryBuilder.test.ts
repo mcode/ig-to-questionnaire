@@ -32,6 +32,9 @@ define "ExampleSpecimen":
 
 define "ExampleDiagnosticReport":
     [DiagnosticReport: "ExampleDiagnosticReport Code"]
+
+define "ExampleMedicationStatement":
+    [MedicationStatement: "Example ValueSet"]
     `;
 
 const libraryBuilder = new LibraryBuilder(MOCK_IG_DIR, <R4.IImplementationGuide>implementationGuide, 'example');

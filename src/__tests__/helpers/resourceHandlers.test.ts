@@ -5,6 +5,7 @@ import exampleCondition from '../mock-ig/site/StructureDefinition-example-condit
 import exampleProcedure from '../mock-ig/site/StructureDefinition-example-procedure.json';
 import exampleSpecimen from '../mock-ig/site/StructureDefinition-example-specimen.json';
 import exampleDiagnosticReport from '../mock-ig/site/StructureDefinition-example-diagnosticreport.json';
+import exampleMedicationStatement from '../mock-ig/site/StructureDefinition-example-medicationstatement.json';
 import { CQLResource } from '../../types/library-types';
 
 const MOCK_VALUESET_MAP = [
@@ -164,6 +165,26 @@ const EXPECTED_DIAGNOSTICREPORT_DEFINITIONS: CQLResource = {
   ]
 };
 
+const EXPECTED_MEDICATIONSTATEMENT_DEFINITIONS: CQLResource = {
+  definitions: [
+    {
+      name: 'ExampleMedicationStatement',
+      resourceType: 'MedicationStatement',
+      lookupName: 'Example ValueSet',
+      dataRequirement: {
+        type: 'MedicationStatement',
+        codeFilter: [
+          {
+            path: 'code',
+            valueSet: 'example-valueset'
+          }
+        ]
+      }
+    }
+  ],
+  codes: []
+};
+
 test('test handler for Observation', () => {
   const resourceHandlerClass = handlerLookup['Observation'];
   const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleObservation, MOCK_VALUESET_MAP);
@@ -211,4 +232,14 @@ test('test handler for DiagnosticReport', () => {
 
   const result = handler!.process();
   expect(result).toEqual(EXPECTED_DIAGNOSTICREPORT_DEFINITIONS);
+});
+
+test('test handler for MedicationStatement', () => {
+  const resourceHandlerClass = handlerLookup['MedicationStatement'];
+  const handler = new resourceHandlerClass(<R4.IStructureDefinition>exampleMedicationStatement, MOCK_VALUESET_MAP);
+
+  expect(handler).toBeDefined();
+
+  const result = handler!.process();
+  expect(result).toEqual(EXPECTED_MEDICATIONSTATEMENT_DEFINITIONS);
 });
