@@ -21,7 +21,7 @@
           }
         }
       ],
-      "type": "string"
+      "type": "choice"
     },
     {
       "linkId": "ExampleCondition",
@@ -34,7 +34,7 @@
           }
         }
       ],
-      "type": "string"
+      "type": "choice"
     },
     {
       "linkId": "ExampleProcedure",
@@ -47,7 +47,7 @@
           }
         }
       ],
-      "type": "string"
+      "type": "choice"
     },
     {
       "linkId": "ExampleSpecimen",
@@ -60,7 +60,7 @@
           }
         }
       ],
-      "type": "string"
+      "type": "choice"
     },
     {
       "linkId": "ExampleDiagnosticReport",
@@ -73,7 +73,7 @@
           }
         }
       ],
-      "type": "string"
+      "type": "choice"
     },
     {
       "linkId": "ExampleMedicationStatement",
@@ -86,7 +86,7 @@
           }
         }
       ],
-      "type": "string"
+      "type": "choice"
     }
   ]
 }

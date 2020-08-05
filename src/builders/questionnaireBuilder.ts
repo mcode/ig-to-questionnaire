@@ -33,7 +33,7 @@ export class QuestionnaireBuilder {
           }
         }
       ],
-      type: R4.Questionnaire_ItemTypeKind._string
+      type: R4.Questionnaire_ItemTypeKind._choice
     });
   }
 }
