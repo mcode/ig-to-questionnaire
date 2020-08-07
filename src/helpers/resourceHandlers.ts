@@ -150,6 +150,7 @@ export class MedicationStatementHandler extends Handler {
 }
 
 export const handlerLookup: { [key: string]: typeof Handler } = {
+  __default: Handler,
   Condition: Handler,
   Observation: Handler,
   Procedure: Handler,
