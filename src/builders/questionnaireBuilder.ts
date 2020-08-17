@@ -26,7 +26,7 @@ export class QuestionnaireBuilder {
       linkId: expression,
       extension: [
         {
-          url: 'http://hl7.org/fhir/StructureDefinition/cqf-expression',
+          url: 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression',
           valueExpression: {
             language: R4.ExpressionLanguageKind._textCql,
             expression: `"${this.libraryName}".${expression}`
