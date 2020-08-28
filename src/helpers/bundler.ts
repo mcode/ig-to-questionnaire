@@ -5,6 +5,7 @@ export function bundlify(resources: R4.IResourceList[]): R4.IBundle {
     resourceType: 'Bundle',
     type: R4.BundleTypeKind._collection,
     entry: resources.map(r => ({
+      fullUrl: `urn:uuid:${r.id}`,
       resource: r
     }))
   };

@@ -26,7 +26,7 @@ function getValueSetDataRequirement(resourceType: string, vsId: string): R4.IDat
     codeFilter: [
       {
         path: 'code',
-        valueSet: vsId
+        valueSet: `urn:uuid:${vsId}`
       }
     ]
   };
