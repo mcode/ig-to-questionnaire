@@ -71,7 +71,7 @@ const EXPECTED_CONDITION_DEFINITIONS: CQLResource = {
         codeFilter: [
           {
             path: 'code',
-            valueSet: 'example-valueset'
+            valueSet: 'urn:uuid:example-valueset'
           }
         ]
       }
@@ -91,7 +91,7 @@ const EXPECTED_PROCEDURE_DEFINITIONS: CQLResource = {
         codeFilter: [
           {
             path: 'code',
-            valueSet: 'example-valueset'
+            valueSet: 'urn:uuid:example-valueset'
           }
         ]
       }
@@ -111,7 +111,7 @@ const EXPECTED_SPECIMEN_DEFINITIONS: CQLResource = {
         codeFilter: [
           {
             path: 'code',
-            valueSet: 'example-valueset'
+            valueSet: 'urn:uuid:example-valueset'
           }
         ]
       }
@@ -176,7 +176,7 @@ const EXPECTED_MEDICATIONSTATEMENT_DEFINITIONS: CQLResource = {
         codeFilter: [
           {
             path: 'code',
-            valueSet: 'example-valueset'
+            valueSet: 'urn:uuid:example-valueset'
           }
         ]
       }
