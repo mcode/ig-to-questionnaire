@@ -7,8 +7,6 @@ test('function returns a valid collection bundle containing the resource', () =>
   const bundle = bundlify(resourceList);
 
   expect(bundle.resourceType).toBe('Bundle');
-  console.log(typeof(bundle.resourceType));
-  console.log(typeof([{fullUrl: 'urn:uuid:example', resource: implementationGuide }]));
   
-  expect(bundle.entry).toContainEqual([{fullUrl: 'urn:uuid:example', resource: implementationGuide }]);
+  expect(bundle.entry).toContainEqual([{fullUrl: 'urn:uuid:example', resource: implementationGuide }][0]);
 });
