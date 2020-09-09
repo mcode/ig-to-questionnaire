@@ -12,6 +12,7 @@
   "item": [
     {
       "linkId": "ExampleObservation",
+      "text": "ExampleObservation",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",
@@ -25,6 +26,7 @@
     },
     {
       "linkId": "ExampleCondition",
+      "text": "ExampleCondition",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",
@@ -38,6 +40,7 @@
     },
     {
       "linkId": "ExampleProcedure",
+      "text": "ExampleProcedure",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",
@@ -51,6 +54,7 @@
     },
     {
       "linkId": "ExampleSpecimen",
+      "text": "ExampleSpecimen",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",
@@ -64,6 +68,7 @@
     },
     {
       "linkId": "ExampleDiagnosticReport",
+      "text": "ExampleDiagnosticReport",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",
@@ -77,6 +82,7 @@
     },
     {
       "linkId": "ExampleMedicationStatement",
+      "text": "ExampleMedicationStatement",
       "extension": [
         {
           "url": "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression",

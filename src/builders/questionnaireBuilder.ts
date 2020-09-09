@@ -24,6 +24,7 @@ export class QuestionnaireBuilder {
   addCqfExpression(expression: string): void {
     this.questionnaire.item!.push({
       linkId: expression,
+      text: expression,
       extension: [
         {
           url: 'http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire-candidateExpression',
