@@ -3,3 +3,6 @@ coverage/
 build/
 *.cql
 output
+
+full-ig/
+*.DS_Store

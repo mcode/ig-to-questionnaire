@@ -131,9 +131,11 @@ export class LibraryBuilder {
     // Process defintions for all resources
     this.resources.forEach(r => {
       r.definitions.forEach(d => {
-        cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"]\n`;
-        this.fhirLibrary.dataRequirement!.push(d.dataRequirement);
-        this.questionnaireBuilder.addCqfExpression(d.name);
+        if (d.resourceType != 'Specimen'){
+          cql += `\ndefine "${d.name}":\n\t[${d.resourceType}: "${d.lookupName}"] R\n\treturn R.code\n`;
+          this.fhirLibrary.dataRequirement!.push(d.dataRequirement);
+          this.questionnaireBuilder.addCqfExpression(d.name);
+        }
       });
     });
 
